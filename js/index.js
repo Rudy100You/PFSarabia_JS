@@ -1,8 +1,6 @@
 const ConstantesConocidas =
 {
-    IVA: 1.25,
-    CFT: 1.02,
-    DESCUENTO: 0.9
+    CFT: 1.63
 }
 
 const BIKES_INFO={
@@ -10,100 +8,108 @@ const BIKES_INFO={
     "HTXR250":{"name":"Honda Tornado XR 250", "price":6100.00, "photoSrc":"honda_tornado_xr_250.jpg"},
     "YTNR250":{"name":"Yamaha Tenere 250", "price":5300.00, "photoSrc":"yamaha_tenere_250.jpg"}
 }
+const BASEDIR = "../"
 
-function displayQuotes(valorTotal, cantidadDeCuotas, moneda){
-    let montoCuota = obtenerValorTotalConIntereses(valorTotal/cantidadDeCuotas);
-    let totalConCuotas=0;
-
-    let cuotas = [];
-
-    for(let i=1; i <= cantidadDeCuotas; i++)
-    {  
-        cuotas.push(montoCuota);
-        totalConCuotas+= montoCuota;
-    }
-    cuotas = aplicarOfertaDescuentoDeCuotas(cuotas);
-    return [armarMensajeFinal(cuotas,totalConCuotas,moneda),totalConCuotas];
-}
-
-const armarMensajeFinal = (cuotas, total, moneda)=>{
-    let mensajeFinal = "<ul>";
-    let i=1;
+async function quotesResults(valorTotal, cantidadDeCuotas, moneda){
+    let interestVal = calcTotalInterestVal(valorTotal)
+    console.log(interestVal)
     
-    for (cuota of cuotas)
-    {
-        mensajeFinal +="<li>" +i+"° Cuota: " + formatearValor(cuota,moneda)+ "</li>";
-        i++;
-    }
-    return mensajeFinal + "</ul> <br>Costo final con cuotas: " + formatearValor(total,moneda)+ "</br>";
-}
+    return await getARSValueConversion(interestVal).then((arsVal=>{
+        if(moneda === 'ARS')
+        interestVal = arsVal;
 
-const obtenerValorTotalConIntereses = (valorTotal)=>{
-    return valorTotal*ConstantesConocidas.IVA;
-}
-
-const formatearValor = (valor, moneda)=>{
-    return valor.toFixed(2)+" "+ moneda;
-}
-
-//se aplica un descuento del 10% en las ultimas 3 cuotas si la cantidad de cuotas es mayor a 16  
-const aplicarOfertaDescuentoDeCuotas = (cuotas)=>{
-    if (cuotas.length > 16)
-    {
-        aux = cuotas.slice(cuotas.length-4,cuotas.length-1);
-        for(let i = 0;i<3; i++)
-        {
-            cuotas.pop();
-            aux[i] *= ConstantesConocidas.DESCUENTO;
+        console.log (arsVal)
+        return {
+        finalValue: interestVal,
+        singleQuote: interestVal / cantidadDeCuotas,
+        quotes: cantidadDeCuotas,
+        currency: moneda
         }
-        
-        return cuotas.concat(aux);
-    }
-    return cuotas;
+    }))
+    
+}
+
+function buildQuoterResHTML(results){
+    return  `<h6>Precio en ${results.quotes} cuotas de ${results.finalValue/results.quotes + " " + results.currency}:</h6>
+            <h4>${results.finalValue + " " + results.currency}</h4>
+            `
+}
+async function getARSValueConversion(valorTotal){
+        return await fetch ('https://api.bluelytics.com.ar/v2/latest').then(async (res)=>res.json()).then((data) =>{
+            console.log(data['blue']['value_sell']);
+            return valorTotal*data['blue']['value_sell'];
+        })
+}
+
+function calcTotalInterestVal(val){
+    return val*ConstantesConocidas.CFT
 }
 
 const buildHistoryHTML = (history)=>{
     let finalHtml = "<h6>Historial</h6><ul>"
-    history['history'].forEach(obj => {
+    history['history'].forEach(obj => { 
+        finalHtml+='<li class= "card">'
         Object.keys(obj).forEach(key => {
           const value = obj[key];
-          finalHtml+="<li>"+key+": "+value+ "</li>"
+          finalHtml+= "<p>" + key+": "+value +"</p>" 
         });
+        finalHtml+="</li>"
       });
       return finalHtml+ "</ul>"
 }
 
-const displayHistory = (form)=>{
-    const data = new FormData(form);
+async function displayQuoterResults  (data){
+    
     const resultadosCotizador = document.getElementById("cotizadorResultados");
     const modelInfo = BIKES_INFO[data.get("seleccionModeloCotizador")];
-    console.log(modelInfo)
-    const quotesRes = displayQuotes(modelInfo["price"],data.get("seleccionCuotasCotizador"),"USD");
-    resultadosCotizador.innerHTML= quotesRes[0];
+    await quotesResults(modelInfo.price, data.get("seleccionCuotasCotizador"),data.get("currencyCheck")).then((res =>{
+        console.log(res)
+        resultadosCotizador.innerHTML = buildQuoterResHTML(res);
+        
+        displayHistory(modelInfo, res);     
+    }))
+}
+
+const displayHistory = (model,results)=>{
 
     let history = JSON.parse(sessionStorage.getItem("quoteHistory"));
-    history['history'] = [...history['history'],{[modelInfo['name']]:modelInfo['price']}]
-    sessionStorage.setItem("quoteHistory",JSON.stringify(history))
+    let newhistoryItem = {'Modelo':model['name'],'Cuotas': results.quotes, 'Valor final en cuotas': results.finalValue};
 
+    if(!history['history'].some(obj => 
+        obj.name == newhistoryItem.name &&  obj.quotes == newhistoryItem.name &&  obj.name == newhistoryItem.name)
+        ){
+       history['history'] = [...history['history'], newhistoryItem]
+       sessionStorage.setItem("quoteHistory",JSON.stringify(history)) 
+    }
     document.getElementById("historialResultados").innerHTML = buildHistoryHTML(history);
 }
 const buildProductInfoHTML = (modelData, currency)=>{
-    let finalHtml = ""
+    return `<img src="${BASEDIR+"img/"+modelData.photoSrc}">
+            <h3>${modelData.name}</h3>
+            <h4>${modelData.price +" " + currency}</h4>
+            `
 }
+
 //main
 
 //quote history
 sessionStorage.setItem("quoteHistory",'{"history":[]}')
 const formCotizador = document.getElementById("cotizadorSimulador-form");
-formCotizador.addEventListener("submit",(evento)=>{
+formCotizador.addEventListener("submit",async (evento)=>{
     evento.preventDefault();
-    displayHistory(formCotizador);
+    const data = new FormData(formCotizador);
+    await displayQuoterResults(data);
 })
 
 //product info display
 var modelSelect = document.querySelector("#seleccionModeloCotizador");
-modelSelect.onchange = ()=> {
+modelSelect.onchange = async()=> {
     modelData = BIKES_INFO[modelSelect.selectedOptions[0].value];
-    document.querySelector("#seleccionModeloCotizador").innerHTML = buildProductInfoHTML(modelData, document.querySelector('input[name="currencyCheck"]:checked').value);
+    await getARSValueConversion(modelData.price).then(price=>{
+        if(document.querySelector('input[name="currencyCheck"]:checked').value === 'ARS')
+          modelData.price = price;
+        }    
+    )
+    document.querySelector("#selectedModelInfo").innerHTML = await buildProductInfoHTML(modelData, document.querySelector('input[name="currencyCheck"]:checked').value|"USD");
 }
 

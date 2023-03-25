@@ -1,3 +1,54 @@
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+
 .cotizadorMainContent{
     padding:5%;
+}
+.cotizadorSimulador{
+    display: flex;
+    flex-wrap: wrap;
+
+    & > * {
+        width: calc(50% - 10px);
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+    & > *:nth-child(3){
+        width: 100%;
+    }
+    & > *:nth-child(4){
+        width: 100%;
+    }
+}
+
+#cotizadorSimulador-form{
+    display: inline;
+    height: max-content;
+    & > * {
+        margin-top: 5%;
+    }
+}
+
+#selectedModelInfo{
+    padding: 5%;
+    height: auto;
+    text-align: center;
+    border: 3px solid $info;
+    & > img{
+        width: 100%;
+        height: auto;
+    }
+}
+
+#historialResultados{
+    & > ul {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 5px;
+    }
+    & > ul > li{
+        list-style-type: none;
+        padding: 2%;
+        width: fit-content;
+    }
 }
