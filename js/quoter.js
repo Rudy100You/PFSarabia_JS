@@ -125,6 +125,14 @@ const buildProductInfoHTML = (modelData, currency) => {
     evento.preventDefault();
     const data = new FormData(formCotizador);
     await displayQuoterResults(data);
+    
+    const targetItem = document.getElementById('cotizadorResultados');
+    const targetItemPosition = targetItem.offsetTop;
+
+    window.scrollTo({
+      top: targetItemPosition,
+      behavior: 'smooth'
+    });
   });
 
   //product info display

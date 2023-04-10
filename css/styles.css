@@ -1,26 +1,34 @@
 .carousel-item-content {
-  display: flex; }
-  .carousel-item-content img {
-    display: block;
+  display: block;
+  height: 60vh; }
+  .carousel-item-content a {
+    text-decoration: none; }
+  .carousel-item-content-text {
+    background: black;
+    background: linear-gradient(180deg, black 2%, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0) 100%);
+    padding-top: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    height: auto; }
+    height: 100%; }
+  .carousel-item-content img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: auto;
+    width: auto;
+    height: 90%; }
 
-@media screen and (max-width: 480px) {
-  .carousel-item-content {
-    display: block;
-    height: fit-content;
-    position: relative; }
-    .carousel-item-content-text {
-      background: black;
-      background: linear-gradient(180deg, black 2%, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0) 100%);
-      padding-top: 5%;
-      padding-left: 5%;
-      padding-right: 5%;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%; } }
+.carousel-control-prev,
+.carousel-control-next {
+  color: red; }
+
+section.landing-section:not(:first-child) {
+  padding: 5%; }
 
 .cotizadorMainContent {
   padding: 5%; }
@@ -29,13 +37,12 @@
   display: flex;
   flex-wrap: wrap; }
   .cotizadorSimulador > * {
-    width: calc(50% - 10px);
+    width: 100%;
     margin-right: 10px;
     margin-bottom: 10px; }
-  .cotizadorSimulador > *:nth-child(3) {
-    width: 100%; }
-  .cotizadorSimulador > *:nth-child(4) {
-    width: 100%; }
+  @media screen and (min-width: 580px) {
+    .cotizadorSimulador > *:nth-child(1), .cotizadorSimulador > *:nth-child(2) {
+      width: calc(50% - 10px); } }
 
 #cotizadorSimulador-form {
   display: inline;
@@ -61,3 +68,6 @@
   list-style-type: none;
   padding: 2%;
   width: fit-content; }
+
+.navbar-brand {
+  padding-left: 5%; }

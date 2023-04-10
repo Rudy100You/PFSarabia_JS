@@ -7,17 +7,15 @@
 .cotizadorSimulador{
     display: flex;
     flex-wrap: wrap;
-
     & > * {
-        width: calc(50% - 10px);
+        width: 100%;
         margin-right: 10px;
         margin-bottom: 10px;
     }
-    & > *:nth-child(3){
-        width: 100%;
-    }
-    & > *:nth-child(4){
-        width: 100%;
+    @media screen and (min-width: 580px){
+        &>*:nth-child(1),&>*:nth-child(2){
+            width: calc(50% - 10px);
+        }
     }
 }
 

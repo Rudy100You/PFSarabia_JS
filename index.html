@@ -10,7 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
     crossorigin="anonymous"></script>
-  <link href="../css/styles.css" rel="stylesheet" />
+  <link href="./css/styles.css" rel="stylesheet" />
   <title>Tomoto.com - Inicio</title>
 </head>
 
@@ -18,7 +18,7 @@
   <header>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">TOMOTO.com</a>
+        <a class="navbar-brand" href="./index.html">TOMOTO.com</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -32,10 +32,10 @@
               <a class="nav-link" href="./pages/cotizador.html">Cotizador</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Catalogo</a>
+              <a class="nav-link" href="./pages/error.html">Catalogo</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Novedades</a>
+              <a class="nav-link" href="./pages/error.html">Novedades</a>
             </li>
           </ul>
         </div>
@@ -43,34 +43,40 @@
     </nav>
   </header>
   <main>
-    <section id="hero_banner">
-      <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="false"  data-bs-theme="dark">
+    <section class="landing-section" id="hero_banner">
+      <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-theme="dark">
         <div class="carousel-inner">
           <div class="carousel-item active">
             <div class="carousel-item-content">
-              <img src="img/benelli_trk_502.jpg" class="d-block" alt="benelli_trk_502" />
-              <div class="carousel-item-content-text">
-                <h3>Benelli TRK 502</h3>
-                <p>Cotizalo ahora!</p>
+              <a href="./pages/cotizador.html">
+                <img src="img/benelli_trk_502.jpg" class="d-block" alt="benelli_trk_502" />
+                <div class="carousel-item-content-text">
+                  <h3>Benelli TRK 502</h3>
+                  <p>Cotizalo ahora!</p>
+              </a>
               </div>
             </div>
           </div>
           <div class="carousel-item">
             <div class="carousel-item-content">
-              <img src="img/honda_tornado_xr_250.jpg" class="d-block" alt="honda_tornado_xr_250" />
-              <div class="carousel-item-content-text">
-                <h3>Honda Tornado XR 250</h3>
-                <p>Cotizalo ahora!</p>
-              </div>
+              <a href="./pages/cotizador.html">
+                <img src="img/honda_tornado_xr_250.jpg" class="d-block" alt="honda_tornado_xr_250" />
+                <div class="carousel-item-content-text">
+                  <h3>Honda Tornado XR 250</h3>
+                  <p>Cotizalo ahora!</p>
+                </div>
+              </a>
             </div>
           </div>
           <div class="carousel-item">
             <div class="carousel-item-content">
-              <img src="img/yamaha_tenere_250.jpg" class="d-block" alt="yamaha_tenere_250" />
-              <div class="carousel-item-content-text">
-                <h3>Yamaha Tenere 250</h3>
-                <p>Cotizalo ahora!</p>
-              </div>
+              <a href="./pages/cotizador.html">
+                <img src="img/yamaha_tenere_250.jpg" class="d-block" alt="yamaha_tenere_250" />
+                <div class="carousel-item-content-text">
+                  <h3>Yamaha Tenere 250</h3>
+                  <p>Cotizalo ahora!</p>
+                </div>
+              </a>
             </div>
           </div>
         </div>
@@ -86,12 +92,12 @@
         </button>
       </div>
     </section>
-    <section class="quoter_banner">
+    <section class="landing-section quoter_banner">
       <h2>Cotiza ya tu 0km</h2>
       <p>Simple, rápido y en pocos pasos!</p>
       <a href="./pages/cotizador.html">Cotizar</a>
     </section>
-    <section>
+    <section class="landing-section">
       <h2>Nuevos ingresos</h2>
       <div class="catalogue_preview-banner">
         <ul class="catalogue_preview-banner-items">
@@ -104,7 +110,7 @@
     </section>
   </main>
   <footer></footer>
-  <script src="./js/procedimientos.js"></script>
+  <script src="./js/index.js"></script>
 </body>
 
 </html>

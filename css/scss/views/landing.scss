@@ -1,2 +1,5 @@
-@import 'landing/landingHeroBanner.scss'
+@import 'landing/landingHeroBanner.scss';
 
+section.landing-section:not(:first-child){
+    padding: 5%;
+}
